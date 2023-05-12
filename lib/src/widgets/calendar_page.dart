@@ -4,6 +4,7 @@
 import 'package:flutter/widgets.dart';
 
 class CalendarPage extends StatelessWidget {
+  final Widget Function(BuildContext context, DateTime day)? eventViewBuilder;
   final Widget Function(BuildContext context, DateTime day)? dowBuilder;
   final Widget Function(BuildContext context, DateTime day) dayBuilder;
   final Widget Function(BuildContext context, DateTime day)? weekNumberBuilder;
@@ -15,11 +16,13 @@ class CalendarPage extends StatelessWidget {
   final bool dowVisible;
   final bool weekNumberVisible;
   final double? dowHeight;
+  final double? eventsViewHeight;
 
   const CalendarPage({
     Key? key,
     required this.visibleDays,
     this.dowBuilder,
+    this.eventViewBuilder,
     required this.dayBuilder,
     this.weekNumberBuilder,
     this.dowDecoration,
@@ -29,7 +32,11 @@ class CalendarPage extends StatelessWidget {
     this.dowVisible = true,
     this.weekNumberVisible = false,
     this.dowHeight,
-  })  : assert(!dowVisible || (dowHeight != null && dowBuilder != null)),
+    this.eventsViewHeight,
+  })  : assert(!dowVisible ||
+            (dowHeight != null &&
+                dowBuilder != null &&
+                eventViewBuilder != null)),
         assert(!weekNumberVisible || weekNumberBuilder != null),
         super(key: key);
 
@@ -47,6 +54,7 @@ class CalendarPage extends StatelessWidget {
               children: [
                 if (dowVisible) _buildDaysOfWeek(context),
                 ..._buildCalendarDays(context),
+                ..._buildEventsTable(context),
               ],
             ),
           ),
@@ -89,6 +97,20 @@ class CalendarPage extends StatelessWidget {
               children: List.generate(
                 7,
                 (id) => dayBuilder(context, visibleDays[index + id]),
+              ),
+            ))
+        .toList();
+  }
+
+  List<TableRow> _buildEventsTable(BuildContext context) {
+    final rowAmount = visibleDays.length ~/ 7;
+
+    return List.generate(rowAmount, (index) => index * 7)
+        .map((index) => TableRow(
+              decoration: rowDecoration,
+              children: List.generate(
+                7,
+                (id) => eventViewBuilder!(context, visibleDays[index + id]),
               ),
             ))
         .toList();

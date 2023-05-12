@@ -75,6 +75,9 @@ class CalendarBuilders<T> {
   /// Custom builder for days of the week labels (Mon, Tue, Wed, etc.).
   final DayBuilder? dowBuilder;
 
+  /// Custom builder for event view in week format.
+  final DayBuilder? eventViewBuilder;
+
   /// Use to customize header's title using different widget
   final DayBuilder? headerTitleBuilder;
 
@@ -97,6 +100,7 @@ class CalendarBuilders<T> {
     this.rangeHighlightBuilder,
     this.singleMarkerBuilder,
     this.markerBuilder,
+    this.eventViewBuilder,
     this.dowBuilder,
     this.headerTitleBuilder,
     this.weekNumberBuilder,

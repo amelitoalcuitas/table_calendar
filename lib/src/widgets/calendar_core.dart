@@ -14,6 +14,7 @@ class CalendarCore extends StatelessWidget {
   final DateTime firstDay;
   final DateTime lastDay;
   final CalendarFormat calendarFormat;
+  final DayBuilder? eventViewBuilder;
   final DayBuilder? dowBuilder;
   final DayBuilder? weekNumberBuilder;
   final FocusedDayBuilder dayBuilder;
@@ -24,6 +25,7 @@ class CalendarCore extends StatelessWidget {
   final Decoration? rowDecoration;
   final TableBorder? tableBorder;
   final EdgeInsets? tablePadding;
+  final double? eventsViewHeight;
   final double? dowHeight;
   final double? rowHeight;
   final BoxConstraints constraints;
@@ -35,6 +37,7 @@ class CalendarCore extends StatelessWidget {
 
   const CalendarCore({
     Key? key,
+    this.eventViewBuilder,
     this.dowBuilder,
     required this.dayBuilder,
     required this.onPageChanged,
@@ -43,6 +46,7 @@ class CalendarCore extends StatelessWidget {
     required this.constraints,
     this.dowHeight,
     this.rowHeight,
+    this.eventsViewHeight,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.calendarFormat = CalendarFormat.month,
     this.pageController,
@@ -88,6 +92,12 @@ class CalendarCore extends StatelessWidget {
             return SizedBox(
               height: dowHeight,
               child: dowBuilder?.call(context, day),
+            );
+          },
+          eventViewBuilder: (context, day) {
+            return SizedBox(
+              height: eventsViewHeight,
+              child: eventViewBuilder?.call(context, day),
             );
           },
           dayBuilder: (context, day) {
